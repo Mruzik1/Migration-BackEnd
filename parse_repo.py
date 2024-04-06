@@ -11,6 +11,9 @@ class MigrationParser:
         self.extensions = extensions
 
     def clone_repo(self):
+        if os.path.exists(self.local_path):
+            print("Repo already exists.")
+            return
         Repo.clone_from(self.repo_url, self.local_path)
 
     def get_filenames(self):
