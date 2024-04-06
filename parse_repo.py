@@ -3,7 +3,7 @@ import os
 
 
 class MigrationParser:
-    def __init__(self, repo_url, repos_folder, extensions=["py", "c"]):
+    def __init__(self, repo_url, repos_folder, extensions=["js", "jsx", "vue"]):
         self.repo_url = repo_url
         self.local_path = repo_url.split("/")[-1].replace(".git", "")
         os.makedirs(repos_folder, exist_ok=True)

@@ -4,24 +4,23 @@ import re
 from parse_repo import MigrationParser
 from model import Model
 
-repo_url = "https://github.com/Mruzik1/Migration-Test.git"
 repos_folder = "Repos"
+frameworks = ['React', 'Vue.js', 'Angular']
+
+# Repository URL
+repo_url = "https://github.com/Mruzik1/Migration-Test.git"
+# Parse the files
 parser = MigrationParser(repo_url, repos_folder)
 code = parser.parse()
 
-
+# Model
 model = Model()
 
-print('Executing...')
-
-# Point to the local server
-client = OpenAI(base_url="http://localhost:5555/v1", api_key="lm-studio")
-
-frameworks = ['React', 'Vue.js', 'Angular']
-
+# Choose frameworks
 from_framework = frameworks[1]
 to_framework = frameworks[0]
 
+# Instruction for the model
 instructions = f"""
 Act as a code translator.
 Rewrite this source code from {from_framework} framework to {to_framework}.
