@@ -2,11 +2,15 @@
 from openai import OpenAI
 import re
 from parse_repo import MigrationParser
+from model import Model
 
 repo_url = "https://github.com/Mruzik1/Migration-Test.git"
 repos_folder = "Repos"
 parser = MigrationParser(repo_url, repos_folder)
 code = parser.parse()
+
+
+model = Model()
 
 print('Executing...')
 
@@ -31,15 +35,7 @@ KEEP IN MIND THAT THIS EXACT TEXT WILL BE EXECUTED AS SOURCE CODE.
 for contents in code:
   prompt = instructions + contents
 
-  completion = client.chat.completions.create(
-    model="TheBloke/deepseek-coder-6.7B-instruct-GGUF/deepseek-coder-6.7b-instruct.Q8_0.gguf",
-    messages=[
-      {"role": "user", "content": prompt }
-    ],
-    temperature=0.1,
-  )
-
-  response = completion.choices[0].message.content
+  response = model.get_response(prompt)
 
   # Use regular expression to extract the code snippet
   pattern = r".*```(.*?)```.*"

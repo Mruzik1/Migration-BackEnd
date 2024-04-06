@@ -14,12 +14,12 @@ class Model:
 			temperature=temperature,
 		)
 
-		return completion.choices
+		return completion.choices[0]
 	
 	def get_response(self, message):
 		model_name = "TheBloke/deepseek-coder-6.7B-instruct-GGUF/deepseek-coder-6.7b-instruct.Q8_0.gguf"
 		completion = self.get_completion(model_name, message)
-		return completion[0].message.content
+		return completion.message.content
 
 
 if __name__ == "__main__":
