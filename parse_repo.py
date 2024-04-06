@@ -33,11 +33,3 @@ class MigrationParser:
             code[filename] = self.read_code(filename)
 
         return code
-
-
-if __name__ == "__main__":
-    repo_url = "https://github.com/Mruzik1/Migration-Test.git"
-    repos_folder = "repos"
-    parser = MigrationParser(repo_url, repos_folder)
-    code = parser.parse()
-    print(code)
