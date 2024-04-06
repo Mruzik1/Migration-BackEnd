@@ -12,22 +12,20 @@ CORS(app)
 
 load_dotenv()
 
-# Define a route and its handler
-@app.post('/code_processor')
-def code_processor():
+@app.post('/code_migrator')
+def architector():
     # Check if the request contains JSON data
     if request.is_json:
         # Parse the JSON data from the request body
         data = request.get_json()
         # Access specific fields from the JSON data
         url = data.get('url')
-        comment = data.get('comment')
         from_framwork = data.get('from_framwork')
         to_framwork = data.get('to_framework')
         
         # Perform processing based on the received data
         response = {
-            'message': f'URL: {url}\n Comment: {comment}, To: {to_framwork}, From: {from_framwork}'
+            'message': f'URL: {url}\n To: {to_framwork}, From: {from_framwork}'
         }
         # Return a JSON response
         return jsonify(response), 200
