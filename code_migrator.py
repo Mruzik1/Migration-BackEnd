@@ -2,6 +2,8 @@ import re
 from parse_repo import MigrationParser
 from model import Model
 from tqdm import tqdm
+import json
+import os
 
 
 class CodeMigrator:
@@ -10,20 +12,23 @@ class CodeMigrator:
         if len(frameworks) != 2:
             raise ValueError("Please provide exactly two frameworks to migrate between.")
 
-        extensions = self.define_extensions(frameworks)
+        ignore_list = self.define_ignored(frameworks)
         self.frameworks = frameworks
-        self.parser = MigrationParser(github_url, repos_folder, extensions=extensions)
+        self.parser = MigrationParser(github_url, repos_folder, ignore_list=ignore_list)
         self.model = Model(model_url)
 
-    def define_extensions(self, frameworks):
-        extensions = []
+        print("Parsing the repository...")
+        self.application = self.parser.parse()
+
+    def define_ignored(self, frameworks):
+        ignore_list = ['node_modules', '.git', 'venv', ".json", ".md", ".config", ".ico"]
         if "react" == frameworks[0].lower():
-            extensions.extend(["jsx", "tsx"])
+            pass
         if "vue.js" == frameworks[0].lower():
-            extensions.append(".vue")
+            pass
         if "angular" == frameworks[0].lower():
-            extensions.append([".ts", ".html", ".css"])
-        return extensions
+            pass
+        return ignore_list
 
     def extract_code(self, response):
         pattern = r".*```(.*?)```.*"
@@ -31,34 +36,43 @@ class CodeMigrator:
         code_snippet = match.group(1) if match else response
         return code_snippet
 
-    def migrate(self):
-        print("Parsing the repository...")
-        code = self.parser.parse()
-        from_framework, to_framework = self.frameworks
-        instructions = f"""
-        Act as a code translator.
-        Rewrite this source code from {from_framework} framework to {to_framework}:
-        """
+    def save_code_json(self, code_description, filename="migrated_code.json"):
+        with open(filename, "w") as f:
+            json.dump(code_description, f)
+        
+    def check_code_json(self, code_filename, filename="migrated_code.json"):
+        with open(filename, "r") as f:
+            code_description = json.load(f)
+        return any(code_filename in code["filename"] for code in code_description)
 
-        print("Migrating the code...")
-        pbar = tqdm(code, total=len(code))
-        code_snippets = []
+    def describe_files(self):
+        def get_instructions(f, code):
+            instructions = f"""
+            Describe code in a file {f} very briefly - 2-3 sentences: {code}.
+            """
+            return instructions
+
+        print("Describing the application...")
+        pbar = tqdm(self.application, total=len(self.application))
+        code_descriptions = []
         for filename in pbar:
+            if os.path.exists("migrated_code.json") and self.check_code_json(filename):
+                continue
             pbar.set_description(f"Processing {filename}")
-            prompt = instructions + code[filename]
+            prompt = get_instructions(filename, self.application[filename])
             response = self.model.get_response(prompt)
             code_snippet = self.extract_code(response)
-            code_snippets.append({
-                "lang": filename.split(".")[-1],
+            code_descriptions.append({
                 "value": code_snippet,
                 "filename": filename
             })
-        return code_snippets
+            self.save_code_json(code_descriptions)
+        return code_descriptions
 
 
 if __name__ == "__main__":
     repo_url = "https://github.com/Mruzik1/Migration-Test.git"
     migrator = CodeMigrator(repo_url)
 
-    codes = migrator.migrate()
+    codes = migrator.describe_files()
     print(codes)
