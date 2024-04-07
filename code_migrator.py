@@ -54,11 +54,12 @@ class CodeMigrator:
 
     def describe_files(self):
         def get_instructions(f, code):
-            instructions = f"""Describe code in a file {f}: {code}."""
+            instructions = f"""Describe code in file {f}: {code}."""
             return instructions
 
         print("Describing the application...")
-        sys_message = "Write a brief description of the code in the provided file (3-5 sentences)."
+        sys_message = "Write a brief description of the code in the provided file (3-5 sentences). " \
+                      "The description must describe what code DOES, not the code itself."
         pbar = tqdm(self.application, total=len(self.application))
         code_descriptions = []
         for filename in pbar:
