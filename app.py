@@ -30,12 +30,12 @@ def architector():
         # Return a JSON response
         return jsonify(response), 200
     else:
-        return jsonify({'error': 'Марк лох'}), 400
+        return jsonify({'error': 'JSON error when reading user data'}), 400
 
 # Run the app if executed directly
 if __name__ == '__main__':
     app.run(
-        host="10.0.4.174",
+        host="localhost",
         port=os.getenv("FLASK_PORT", 6666), 
         debug=False
     )
