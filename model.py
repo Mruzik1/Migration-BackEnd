@@ -5,7 +5,7 @@ class Model:
 	def __init__(self, url="http://localhost:5555/v1"):
 		self.url = url
 
-	def get_completion(self, model, msg, sys_msg, temperature=0.3):
+	def get_completion(self, model, msg, sys_msg, temperature=0.7):
 		client = OpenAI(base_url="http://localhost:5555/v1", api_key="lm-studio")
 		completion = client.chat.completions.create(
 			model=model,
@@ -21,6 +21,7 @@ class Model:
 	def get_response(self, msg, sys_msg):
 		# model_name = "second-state/StarCoder2-7B-GGUF/starcoder2-7b-Q8_0.gguf"
 		# model_name = "TheBloke/deepseek-llm-7B-chat-GGUF/deepseek-llm-7b-chat.Q8_0.gguf"
+		# model_name = "LoneStriker/deepseek-coder-7b-instruct-v1.5-GGUF"
 		model_name = "TheBloke/deepseek-coder-6.7B-instruct-GGUF"
 		completion = self.get_completion(model_name, msg, sys_msg)
 		return completion.message.content

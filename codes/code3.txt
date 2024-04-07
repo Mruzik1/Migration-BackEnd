@@ -1,0 +1,16 @@
+Based on your description, here is a code in SCSS (Sassy CSS) that uses Tailwind CSS and defines a root variable for the primary color. 
+
+```scss
+@tailwind base;
+@tailwind components;
+
+:root {
+   --primary-color: rgb(219, 39, 119); /* Magenta */
+}
+
+body {
+    background-color: rgba(var(--primary-color), 0.03);
+}
+```
+
+This code will set the body's background color to a semi-transparent version of magenta (purple). The alpha value is set to 0.03, which makes the color very transparent. Please note that this code needs to be compiled into CSS using a SCSS compiler before it can be used in your project.

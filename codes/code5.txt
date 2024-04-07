@@ -1,0 +1,24 @@
+Based on your file description, here's the corresponding Vue component code using Tailwind CSS classes:
+
+```vue
+<template>
+  <nav class="bg-gray-800 px-4 py-2 flex items-center justify-between shadow-md">
+    <div class="flex space-x-4">
+      <a href="/" class="text-white hover:text-blue-600 rounded-full">Deutsche Telekom IT Solutions</a>
+    </div>
+    
+    <ul class="flex items-center space-x-2">
+      <li><a href="#about" class="text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none">About</a></li>
+      <li><a href="#services" class="text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none">Services</a></li>
+      <li><a href="#contact" class="text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none">Contact</a></li>
+      <li><a href="#login" class="text-white bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none">Login</a></li>
+    </ul>
+  </nav>
+</template>
+```
+Please note that the actual structure of your Vue.js application might require additional components or templates to function properly. You may also need to adjust the Tailwind CSS classes according to your specific needs and design system. 
+
+The JSON response you requested would look like this:
+```json
+[{"code": "<template>\n  <nav class=\"bg-gray-800 px-4 py-2 flex items-center justify-between shadow-md\">\n    <div class=\"flex space-x-4\">\n      <a href=\"/\" class=\"text-white hover:text-blue-600 rounded-full\">Deutsche Telekom IT Solutions</a>\n    </div>\n    \n    <ul class=\"flex items-center space-x-2\">\n      <li><a href=\"#about\" class=\"text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none\">About</a></li>\n      <li><a href=\"#services\" class=\"text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none\">Services</a></li>\n      <li><a href=\"#contact\" class=\"text-white hover:bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none\">Contact</a></li>\n      <li><a href=\"#login\" class=\"text-white bg-blue-600 rounded px-3 py-1 transition duration-500 ease select-none\">Login</a></li>\n    </ul>\n  </nav>\n</template>", "filename": "/hackkosice2024-fe/src/components/NavbarComponent.vue"}]
+```

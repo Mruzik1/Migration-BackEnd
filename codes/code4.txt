@@ -1,0 +1,19 @@
+Based on the provided file description, here is a generated JavaScript code snippet that follows all steps described in the description:
+
+```javascript
+import { createApp } from 'vue';
+import App from './App.vue';
+import PrimeVue from 'primevue/config';
+import Axios from 'axios';
+import VueAxios from 'vue-axios';
+import 'primevue/resources/themes/nova-light/theme.css';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+
+const app = createApp(App);
+app.use(PrimeVue);
+app.use(new VueAxios(Axios));
+app.mount('#app');
+```
+This code creates a new Vue instance, uses PrimeVue and Axios plugins, imports CSS files for PrimeVue, mounts the app to an HTML element with id "app". 
+Please replace './App.vue' in `createApp(App)` if your main component has different path or name. The code also assumes that you have correctly installed all necessary dependencies (like Vue, PrimeVue and Axios). If not, please install them first using npm or yarn package manager.
