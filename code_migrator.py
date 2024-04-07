@@ -90,16 +90,9 @@ class CodeMigrator:
     def generate_code(self, code_description):
         print("Generating code based on code description")
         sys_message = \
-        "Act as a front-end developer." \
-        f"You will get JSON object containing file desciptions for {self.frameworks[1]} app. " \
-        f"Generate code for each of these files of {self.frameworks[1]} app using provided description." \
-        "Please provide your answer in the same JSON format, keep the code instead of description" \
-        '''YOUR ANSWER MUST CONTAIN ONLY CODE, NO FURTHER EXPLALNATIONS. IMAGINE THIS AS I HAVE OPENED A FILE WITH CODE.
-        NO TEXT CAN BE WRITTEN AFTER THE CODE. DO NOT MARK THE END OF CODE IN ANY COMMMENTS.
-        KEEP IN MIND THAT THIS EXACT TEXT WILL BE EXECUTED AS A SOURCE CODE.'''
-        message = f"```json\n{code_description}\n```"
-        response = self.model.get_response(message, sys_message)
-        return response
+        f"You will get JSON object containing files' desciptions for {self.frameworks[0]} app. " \
+        f"Generate new files structure for {self.frameworks[1]} app using provided files structure and files descriptions. " \
+        
 
 if __name__ == "__main__":
     repo_url = "https://github.com/Mruzik1/Migration-Test.git"
