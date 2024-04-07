@@ -39,6 +39,13 @@ class CodeMigrator:
     def save_code_json(self, code_description, filename="migrated_code.json"):
         with open(filename, "w") as f:
             json.dump(code_description, f)
+
+    def load_code_json(self, filename="migrated_code.json"):
+        if not os.path.exists(filename):
+            return []
+        with open(filename, "r") as f:
+            code_description = json.load(f)
+        return code_description
         
     def check_code_json(self, code_filename, filename="migrated_code.json"):
         with open(filename, "r") as f:
@@ -47,32 +54,42 @@ class CodeMigrator:
 
     def describe_files(self):
         def get_instructions(f, code):
-            instructions = f"""
-            Describe code in a file {f} very briefly - 2-3 sentences: {code}.
-            """
+            instructions = f"""Describe code in a file {f}: {code}."""
             return instructions
 
         print("Describing the application...")
+        sys_message = "Write a brief description of the code in the provided file (3-5 sentences)."
         pbar = tqdm(self.application, total=len(self.application))
         code_descriptions = []
         for filename in pbar:
             if os.path.exists("migrated_code.json") and self.check_code_json(filename):
                 continue
             pbar.set_description(f"Processing {filename}")
-            prompt = get_instructions(filename, self.application[filename])
-            response = self.model.get_response(prompt)
+            message = get_instructions(filename, self.application[filename])
+            response = self.model.get_response(message, sys_message)
             code_snippet = self.extract_code(response)
             code_descriptions.append({
-                "value": code_snippet,
+                "description": code_snippet,
                 "filename": filename
             })
             self.save_code_json(code_descriptions)
         return code_descriptions
+    
+    def describe_structure(self, files_structure_path="migrated_code.json"):
+        print("Describing the file structure...")
+        files_structure = self.load_code_json(files_structure_path)
+        sys_message= \
+        f"You will get JSON object containing files structure for {self.frameworks[0]} app. " \
+        f"Generate new files structure for {self.frameworks[1]} app using provided files structure and files descriptions. " \
+        "Generate files structure strictly in the same format as the provided example: ```json\n\[{\"description\": brief description of the file contents, \"filename\": path to file\}, ...]\n``` "
+        message = f"```json\n{files_structure}\n```"
+        response = self.model.get_response(message, sys_message)
+        return response
 
 
 if __name__ == "__main__":
     repo_url = "https://github.com/Mruzik1/Migration-Test.git"
     migrator = CodeMigrator(repo_url)
 
-    codes = migrator.describe_files()
-    print(codes)
+    code_description = migrator.describe_files()
+    # print(migrator.describe_structure())

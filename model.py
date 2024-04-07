@@ -2,23 +2,27 @@ from openai import OpenAI
 
 
 class Model:
-	def __init__(self, url="http://10.0.4.174:5555/v1"):
-		self.client = OpenAI(base_url=url, api_key="lm-studio")
+	def __init__(self, url="http://localhost:5555/v1"):
+		self.url = url
 
-	def get_completion(self, model, message, temperature=0.7):
-		completion = self.client.chat.completions.create(
+	def get_completion(self, model, msg, sys_msg, temperature=0.3):
+		client = OpenAI(base_url="http://localhost:5555/v1", api_key="lm-studio")
+		completion = client.chat.completions.create(
 			model=model,
 			messages=[
-				{"role": "user", "content": message}
+				{"role": "system", "content": sys_msg},
+    			{"role": "user", "content": msg}
 			],
 			temperature=temperature,
 		)
 
 		return completion.choices[0]
 	
-	def get_response(self, message):
-		model_name = "TheBloke/deepseek-coder-6.7B-instruct-GGUF/deepseek-coder-6.7b-instruct.Q8_0.gguf"
-		completion = self.get_completion(model_name, message)
+	def get_response(self, msg, sys_msg):
+		# model_name = "second-state/StarCoder2-7B-GGUF/starcoder2-7b-Q8_0.gguf"
+		# model_name = "TheBloke/deepseek-llm-7B-chat-GGUF/deepseek-llm-7b-chat.Q8_0.gguf"
+		model_name = "TheBloke/deepseek-coder-6.7B-instruct-GGUF"
+		completion = self.get_completion(model_name, msg, sys_msg)
 		return completion.message.content
 
 
