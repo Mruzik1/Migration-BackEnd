@@ -30,11 +30,10 @@ class CodeMigrator:
             pass
         return ignore_list
 
-    def extract_code(self, response):
-        pattern = r".*```(.*?)```.*"
-        match = re.search(pattern, response)
-        code_snippet = match.group(1) if match else response
-        return code_snippet
+    def extract_json_text(input_string):
+        pattern = r"```json\n(.*?)\n```"
+        matches = re.findall(pattern, input_string, re.DOTALL)
+        return matches
 
     def save_code_json(self, code_description, filename="migrated_code.json"):
         with open(filename, "w") as f:
@@ -52,7 +51,7 @@ class CodeMigrator:
             code_description = json.load(f)
         return any(code_filename in code["filename"] for code in code_description)
 
-    def describe_files(self):
+    def describe_files(self, json_name="migrated_code.json"):
         def get_instructions(f, code):
             instructions = f"""Describe code in file {f}: {code}."""
             return instructions
@@ -85,7 +84,7 @@ class CodeMigrator:
         "Generate files structure strictly in the same format as the provided example: ```json\n\[{\"description\": brief description of the file contents, \"filename\": path to file\}, ...]\n``` "
         message = f"```json\n{files_structure}\n```"
         response = self.model.get_response(message, sys_message)
-        return response
+        return self.extract_json_text(response)
 
     def generate_code(self, code_description):
         print("Generating code based on code description")
@@ -98,6 +97,8 @@ if __name__ == "__main__":
     repo_url = "https://github.com/Mruzik1/Migration-Test.git"
     migrator = CodeMigrator(repo_url)
 
-    code_description = migrator.describe_files()
-    converted_code = migrator.generate_code(code_description)
-    # print(migrator.describe_structure())
+    # code_description = migrator.describe_files()
+    new_structure = migrator.describe_structure()
+    migrator.save_code_json(new_structure, "new_structure.json")
+    # converted_code = migrator.generate_code(code_description)
+    
