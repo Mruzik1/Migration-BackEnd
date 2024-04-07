@@ -79,7 +79,7 @@ class CodeMigrator:
     def describe_structure(self, files_structure_path="migrated_code.json"):
         print("Describing the file structure...")
         files_structure = self.load_code_json(files_structure_path)
-        sys_message= \
+        sys_message = \
         f"You will get JSON object containing files structure for {self.frameworks[0]} app. " \
         f"Generate new files structure for {self.frameworks[1]} app using provided files structure and files descriptions. " \
         "Generate files structure strictly in the same format as the provided example: ```json\n\[{\"description\": brief description of the file contents, \"filename\": path to file\}, ...]\n``` "
@@ -87,10 +87,17 @@ class CodeMigrator:
         response = self.model.get_response(message, sys_message)
         return response
 
+    def generate_code(self, code_description):
+        print("Generating code based on code description")
+        sys_message = \
+        f"You will get JSON object containing files' desciptions for {self.frameworks[0]} app. " \
+        f"Generate new files structure for {self.frameworks[1]} app using provided files structure and files descriptions. " \
+        
 
 if __name__ == "__main__":
     repo_url = "https://github.com/Mruzik1/Migration-Test.git"
     migrator = CodeMigrator(repo_url)
 
     code_description = migrator.describe_files()
+    converted_code = migrator.generate_code(code_description)
     # print(migrator.describe_structure())
